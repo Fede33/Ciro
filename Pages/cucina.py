@@ -1,13 +1,15 @@
 import streamlit as st
 
 # TO-DO
-# Mettere contatori e variabili varie nel session state
-# Capire come mai non mostra gli ordini!!
+# Vedere come sfruttare gli indici e i numeri dei tavoli -> indice != numero tavolo
 
 # Lista dove inserire gli ordini
-orders = ["[1] Panino, pizza, coca cola", 
-          "[2] Pasta scampi, vino rosso",
-          "[3] Bistecca, birra"]
+orders = ["Panino, pizza, coca cola [T1]", 
+          "Pasta scampi, vino rosso [T2]",
+          "Bistecca, birra [T3]"]
+
+# Creo copia statica degli ordini [NON USATA]
+orders_copy = orders.copy
 
 # Funzione per mostrare gli ordini
 def display_orders():
@@ -15,8 +17,10 @@ def display_orders():
     if not st.session_state.lista_ordini:
         st.write("Ancora nessun ordine!")
     else:
+        i = 1
         for order in st.session_state.lista_ordini:
-            st.write(order, "\n")
+            st.write(i, ". ", order, "\n")
+            i += 1
             
 # Funzione per marcare gli ordini come completati
 def complete_order(order_number):
@@ -45,10 +49,18 @@ def app():
     # Marca ordine come completato
     elif menu_choice == "Marca come Completato":
         st.header("Marca come Completato")
-        order_number = st.number_input("Inserisci l'ID dell'ordine completato:", min_value=1, max_value=len(orders), step=1)
+        order_number = st.number_input("Inserisci l'ID dell'ordine completato:", min_value=1, max_value=len(st.session_state.lista_ordini), step=1)
         if st.button("Completato!"):
-            complete_order(order_number)
-            st.success("Ordine marcato come completato")
+
+            #Caso: non ci sono più ordini
+            if(st.session_state.tot_ordini - len(st.session_state.lista_ordini) == st.session_state.tot_ordini):
+                st.error("Non ci sono ancora ordini!")
+
+            #Caso: ci sono ordini da soddisfare
+            else: 
+                complete_order(order_number)
+                st.success("Ordine marcato come completato")
+                st.experimental_rerun()
     
     # Mostra il numero di ordini compeltati su totali
     st.write(f"## Numero di Ordini Completati: {st.session_state.tot_ordini - len(st.session_state.lista_ordini)}/{st.session_state.tot_ordini}")
