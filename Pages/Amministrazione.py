@@ -100,7 +100,7 @@ docs = doc_ref.stream()
 piatti = []
 for doc in docs:
     st.write(doc)
-    menu_dict = {'n  ome': doc.to_dict()['nome'], 'Prezzo': doc.to_dict()['prezzo'], 'disp': doc.to_dict()['disponibilità'], 'Stato': doc.to_dict()['stato']}
+    menu_dict = {'Nome': doc.to_dict()['nome'], 'Prezzo': doc.to_dict()['prezzo'], 'disp': doc.to_dict()['disponibilità'], 'Stato': doc.to_dict()['stato']}
     piatti.append(menu_dict)
 
 if piatti!=[]:
@@ -121,17 +121,17 @@ if piatti!=[]:
     elimina_selezionati = col1.button('Elimina selezionati')
     if elimina_selezionati:
         if selected == []:
-            st.warning('⚠️ Seleziona almeno un vino')
+            st.warning('⚠️ Seleziona almeno un piatto')
         else:
             for dictionary in selected:
-                nome_d = dictionary['Nome'] + '-' + dictionary['Annata']
-                db.collection(u'vini').document(nome_d).delete()
+                nome_d = dictionary['Nome'] + '-codice'
+                db.collection(u'menu').document(nome_d).delete()
             st.success(f'Eliminazione avvenuta')
             time.sleep(1)
             st.experimental_rerun()
             
-    elimina_esauriti = col2.button('Elimina esauriti')
+    oscura_selezionati = col2.button('Oscura selezionati')
 
 
 else:
-    st.warning('Nessun partecipante registrato')
+    st.warning('Nessun piatto registrato')
