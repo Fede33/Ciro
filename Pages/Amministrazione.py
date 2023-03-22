@@ -13,16 +13,17 @@ db = firestore.client()
 
 st.markdown('# <span style="color: #983C8E;">Amministrazione</span>', unsafe_allow_html=True)
 
-choice = st.selectbox('Scegli che azione eseguire', ['','Inserimento', 'Aggiornamento', 'Eliminazione'])
+options = ["Piatti", "Tavoli"]
+decis = st.sidebar.selectbox("Scegli cosa vuoi amministrare:", options)
 
-
+if decis == "Piatti":
+    choice = st.selectbox('Scegli che azione eseguire', ['','Inserimento', 'Aggiornamento', 'Eliminazione'])
 if choice == '':
     st.info('Puoi scegliere se inserire, aggiungere o eliminare un piatto dal menù', icon="ℹ️")
 
 if choice == 'Inserimento':
     # --- Inserimento campi del prodotto ---
     prod_nome = st.text_input('Nome del piatto')
-    prod_disp = st.number_input('Disponibilità', step=1, min_value=1, value=1)
     prod_prezzo = st.number_input('Prezzo del piatto', min_value=0.00)
     prod_stato = st.selectbox('Quale è lo stato del piatto?',('Disponibile', 'NON Disponibile'))
     
@@ -30,40 +31,38 @@ if choice == 'Inserimento':
     if bottone_inser:
         if prod_nome=='':
             st.warning('⚠️ Inserisci un nome valido')
-        elif prod_disp=='':
-            st.warning('⚠️ Inserisci una disponibilità valida')
         elif prod_prezzo=='':
             st.warning('⚠️ Inserisci un prezzo valido')
         elif prod_stato=='':
             st.warning('⚠️ Inserisci uno stato valido')
         else:
             prod_id = prod_nome + '-codice'
+            doc_reff = db.collection(u"menu").document(prod_id)
+            doc = doc_reff.get()
             # --- Inserimento di nuovi campi all'interno della collection partecipanti ---
-            db.collection(u"menu").document(prod_id).set({   
-                            'nome': str(prod_nome),
-                            'prezzo': float(prod_prezzo),
-                            'disponibilità': int(prod_disp),
-                            'stato': str(prod_stato)
+            doc_reff.set({   
+                            'nome': prod_nome,
+                            'prezzo': prod_prezzo,
+                            'stato': prod_stato
                             })
     
             st.success('Inserimento avvenuto con successo')
             
 if choice == 'Aggiornamento':
+    # ---- Lista con i piatti -------
+    docs = db.collection(u'menu').stream()
+    dishes = ['']
+    for doc in docs:
+        dishes.append(doc.to_dict()['nome'])
     # --- Inserimento campi del prodotto ---
-    prod_nome = st.text_input('Nome del piatto')
-    prod_disp = st.number_input('Disponibilità', step=1, min_value=1, value=1)
+    prod_nome = st.selectbox('Seleziona il piatto', dishes)
     prod_prezzo = st.number_input('Prezzo del piatto', min_value=0.00)
     prod_stato = st.selectbox('Quale è lo stato del piatto?',('Disponibile', 'NON Disponibile'))
     
-    bottone_mod = st.button('Aggiorna')
+    bottone_mod = st.button('Modifica')
     if bottone_mod:
         if prod_nome=='':
-            st.warning('⚠️ Inserisci un nome valido')
-        elif prod_disp!='':
-            prod_id = prod_nome + '-codice'
-            db.collection(u"menu").document(prod_id).set({   
-                        'disponibilità': prod_disp
-                        })
+            st.warning('⚠️ Seleziona il piatto che desideri modificare')
         elif prod_prezzo!='':
             prod_id = prod_nome + '-codice'
             db.collection(u"menu").document(prod_id).update({   
@@ -78,8 +77,13 @@ if choice == 'Aggiornamento':
         st.success('Modifica effettuata con successo')
         
 if choice == 'Eliminazione':
+    # ---- Lista con i piatti -------
+    docs = db.collection(u'menu').stream()
+    dishes = ['']
+    for doc in docs:
+        dishes.append(doc.to_dict()['nome'])
     # --- Inserimento campi del prodotto ---
-    prod_nome = st.text_input('Nome del piatto')
+    prod_nome = st.selectbox('Seleziona il piatto', dishes)
     bottone_del = st.button('Elimina')
     if bottone_del:
         if prod_nome=='':
@@ -91,16 +95,15 @@ if choice == 'Eliminazione':
             st.success('Eliminazione avvenuta con successo')
             
 ###############################################################################################
-
-doc_ref = db.collection("menu")
-
-docs = doc_ref.stream()
+doc_ref2 = db.collection("menu")
+docs2 = doc_ref2.stream()
 
 # --- Costruzione di una tabella dei dati del database
 piatti = []
-for doc in docs:
-    st.write(doc)
-    menu_dict = {'Nome': doc.to_dict()['nome'], 'Prezzo': doc.to_dict()['prezzo'], 'disp': doc.to_dict()['disponibilità'], 'Stato': doc.to_dict()['stato']}
+for doc in docs2:
+    #st.write(doc)
+    aiuto = doc.to_dict()['nome']
+    menu_dict = {"Nome": aiuto, "Prezzo": doc.to_dict()['prezzo'], "Stato": doc.to_dict()['stato']}
     piatti.append(menu_dict)
 
 if piatti!=[]:
@@ -135,3 +138,8 @@ if piatti!=[]:
 
 else:
     st.warning('Nessun piatto registrato')
+
+
+
+if decis == "Tavoli":
+    
