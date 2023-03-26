@@ -139,7 +139,4 @@ if piatti!=[]:
 else:
     st.warning('Nessun piatto registrato')
 
-
-
-if decis == "Tavoli":
     
