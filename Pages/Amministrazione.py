@@ -12,12 +12,7 @@ if not firebase_admin._apps:
 db = firestore.client()
 
 st.markdown('# <span style="color: #983C8E;">Amministrazione</span>', unsafe_allow_html=True)
-
-options = ["Piatti", "Tavoli"]
-decis = st.sidebar.selectbox("Scegli cosa vuoi amministrare:", options)
-
-if decis == "Piatti":
-    choice = st.selectbox('Scegli che azione eseguire', ['','Inserimento', 'Aggiornamento', 'Eliminazione'])
+choice = st.selectbox('Scegli che azione eseguire', ['','Inserimento', 'Aggiornamento', 'Eliminazione'])
 if choice == '':
     st.info('Puoi scegliere se inserire, aggiungere o eliminare un piatto dal menù', icon="ℹ️")
 
@@ -26,6 +21,7 @@ if choice == 'Inserimento':
     prod_nome = st.text_input('Nome del piatto')
     prod_prezzo = st.number_input('Prezzo del piatto', min_value=0.00)
     prod_stato = st.selectbox('Quale è lo stato del piatto?',('Disponibile', 'NON Disponibile'))
+    prod_seq = st.selectbox('Quale è la portata del piatto?',("Antipasto", "Primo", "Secondo", "Contorno", "Dolce"))
     
     bottone_inser = st.button('Inserisci')
     if bottone_inser:
@@ -35,6 +31,8 @@ if choice == 'Inserimento':
             st.warning('⚠️ Inserisci un prezzo valido')
         elif prod_stato=='':
             st.warning('⚠️ Inserisci uno stato valido')
+        elif prod_seq=="":
+            st.warning('⚠️ Inserisci una portata valida')
         else:
             prod_id = prod_nome + '-codice'
             doc_reff = db.collection(u"menu").document(prod_id)
@@ -43,7 +41,8 @@ if choice == 'Inserimento':
             doc_reff.set({   
                             'nome': prod_nome,
                             'prezzo': prod_prezzo,
-                            'stato': prod_stato
+                            'stato': prod_stato,
+                            'portata': prod_seq,
                             })
     
             st.success('Inserimento avvenuto con successo')
@@ -103,7 +102,7 @@ piatti = []
 for doc in docs2:
     #st.write(doc)
     aiuto = doc.to_dict()['nome']
-    menu_dict = {"Nome": aiuto, "Prezzo": doc.to_dict()['prezzo'], "Stato": doc.to_dict()['stato']}
+    menu_dict = {"Nome": aiuto, "Prezzo": doc.to_dict()['prezzo'], "Stato": doc.to_dict()['stato'], "Portata": doc.to_dict()['portata']}
     piatti.append(menu_dict)
 
 if piatti!=[]:

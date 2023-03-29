@@ -28,5 +28,37 @@ if numero_tavoli and tavoli:
     
     st.success('Inserimento avvenuto con successo')
 
-else:
+if numero_tavoli == "" and tavoli == "":
     st.warning('Inserisci numero di tavoli corretto ⚠️')
+
+st.write("\n") #solo per una migliore interfaccia
+st.write("\n")
+st.write("\n")
+
+st.write("Cambia stato del tavolo")
+docs = db.collection(u'tavoli').stream()
+tavoli = []
+for doc in docs:
+    tavoli.append(doc.to_dict()['id'])
+
+col5, col6 = st.columns(2)
+with col5:
+    choice1 = st.selectbox("Scegli il tavolo", tavoli)
+    butt = st.button("Aggiorna tavolo")
+
+with col6:
+    stato = ["Occupato", "Libero", "Prenotato"]
+    choice2 = st.selectbox("Scegli lo stato", stato)
+
+if choice1 and choice2!=" " and choice2 and butt:
+    db.collection(u"tavoli").document(str(choice1)).update({
+        'stato': choice2
+                        })
+
+
+    
+    st.success('Modifica effettuata con successo')
+
+if choice1 == "" or choice2 =="":
+    st.warning("Seleziona tavolo e stato ⚠️")
+
