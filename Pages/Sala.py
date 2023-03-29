@@ -17,6 +17,9 @@ db = firestore.client()
 
 col1, col2, col3, col4 = st.columns(4)
 
+for()
+
+
 with col1:
     but1 = st.button("Tavolo 1 🍽")
     st.write(" ")
@@ -66,7 +69,7 @@ with col4:
     st.write(" ")
 
 st.write("Cambia stato del tavolo")
-docs = db.collection(u'tavoli').stream
+docs = db.collection(u'tavoli').stream()
 tavoli = [" "]
 for doc in docs:
     tavoli.append(doc.to_dict()['numero'])
@@ -79,8 +82,154 @@ with col6:
     stato = [" ", "Occupato", "Libero", "Prenotato"]
     choice2 = st.selectbox("Scegli lo stato", stato)
 
-if choice1 and choice2:
-    docs = db.collection(u'tavoli').stream
+if choice1 and choice2!=" ":
+    db.collection(u"menu").document(choice1).update({
+        'stato': choice2
+                        })
+    if choice1 == "1":
+        if choice2 == "Occupato":
+            but1 = st.button("Tavolo 1 👨‍👩‍👧‍👦")
+        if choice2 == "Libero":
+            but1 = st.button("Tavolo 1 🍽")
+        if choice2 == "Prenotato":
+            but1 = st.button("Tavolo 1 🕓")
+    if choice1 == "2":
+        if choice2 == "Occupato":
+            but1 = st.button("Tavolo 2 👨‍👩‍👧‍👦")
+        if choice2 == "Libero":
+            but1 = st.button("Tavolo 2 🍽")
+        if choice2 == "Prenotato":
+            but1 = st.button("Tavolo 2 🕓")    
+    if choice1 == "3":
+        if choice2 == "Occupato":
+            but1 = st.button("Tavolo 3 👨‍👩‍👧‍👦")
+        if choice2 == "Libero":
+            but1 = st.button("Tavolo 3 🍽")
+        if choice2 == "Prenotato":
+            but1 = st.button("Tavolo 3 🕓")
+    if choice1 == "4":
+        if choice2 == "Occupato":
+            but1 = st.button("Tavolo 4 👨‍👩‍👧‍👦")
+        if choice2 == "Libero":
+            but1 = st.button("Tavolo 4 🍽")
+        if choice2 == "Prenotato":
+            but1 = st.button("Tavolo 4 🕓")
+    if choice1 == "5":
+        if choice2 == "Occupato":
+            but1 = st.button("Tavolo 5 👨‍👩‍👧‍👦")
+        if choice2 == "Libero":
+            but1 = st.button("Tavolo 5 🍽")
+        if choice2 == "Prenotato":
+            but1 = st.button("Tavolo 5 🕓")
+    if choice1 == "6":
+        if choice2 == "Occupato":
+            but1 = st.button("Tavolo 6 👨‍👩‍👧‍👦")
+        if choice2 == "Libero":
+            but1 = st.button("Tavolo 6 🍽")
+        if choice2 == "Prenotato":
+            but1 = st.button("Tavolo 6 🕓")    
+    if choice1 == "7":
+        if choice2 == "Occupato":
+            but1 = st.button("Tavolo 7 👨‍👩‍👧‍👦")
+        if choice2 == "Libero":
+            but1 = st.button("Tavolo 7 🍽")
+        if choice2 == "Prenotato":
+            but1 = st.button("Tavolo 7 🕓")
+    if choice1 == "8":
+        if choice2 == "Occupato":
+            but1 = st.button("Tavolo 8 👨‍👩‍👧‍👦")
+        if choice2 == "Libero":
+            but1 = st.button("Tavolo 8 🍽")
+        if choice2 == "Prenotato":
+            but1 = st.button("Tavolo 8 🕓")
+    if choice1 == "9":
+        if choice2 == "Occupato":
+            but1 = st.button("Tavolo 9 👨‍👩‍👧‍👦")
+        if choice2 == "Libero":
+            but1 = st.button("Tavolo 9 🍽")
+        if choice2 == "Prenotato":
+            but1 = st.button("Tavolo 9 🕓")
+    if choice1 == "10":
+        if choice2 == "Occupato":
+            but1 = st.button("Tavolo 10 👨‍👩‍👧‍👦")
+        if choice2 == "Libero":
+            but1 = st.button("Tavolo 10 🍽")
+        if choice2 == "Prenotato":
+            but1 = st.button("Tavolo 10 🕓")    
+    if choice1 == "11":
+        if choice2 == "Occupato":
+            but1 = st.button("Tavolo 11 👨‍👩‍👧‍👦")
+        if choice2 == "Libero":
+            but1 = st.button("Tavolo 11 🍽")
+        if choice2 == "Prenotato":
+            but1 = st.button("Tavolo 11 🕓")
+    if choice1 == "12":
+        if choice2 == "Occupato":
+            but1 = st.button("Tavolo 12 👨‍👩‍👧‍👦")
+        if choice2 == "Libero":
+            but1 = st.button("Tavolo 12 🍽")
+        if choice2 == "Prenotato":
+            but1 = st.button("Tavolo 12 🕓")
+    if choice1 == "13":
+        if choice2 == "Occupato":
+            but1 = st.button("Tavolo 13 👨‍👩‍👧‍👦")
+        if choice2 == "Libero":
+            but1 = st.button("Tavolo 13 🍽")
+        if choice2 == "Prenotato":
+            but1 = st.button("Tavolo 13 🕓")
+    if choice1 == "14":
+        if choice2 == "Occupato":
+            but1 = st.button("Tavolo 14 👨‍👩‍👧‍👦")
+        if choice2 == "Libero":
+            but1 = st.button("Tavolo 14 🍽")
+        if choice2 == "Prenotato":
+            but1 = st.button("Tavolo 14 🕓")    
+    if choice1 == "15":
+        if choice2 == "Occupato":
+            but1 = st.button("Tavolo 15 👨‍👩‍👧‍👦")
+        if choice2 == "Libero":
+            but1 = st.button("Tavolo 15 🍽")
+        if choice2 == "Prenotato":
+            but1 = st.button("Tavolo 15 🕓")
+    if choice1 == "16":
+        if choice2 == "Occupato":
+            but1 = st.button("Tavolo 16 👨‍👩‍👧‍👦")
+        if choice2 == "Libero":
+            but1 = st.button("Tavolo 16 🍽")
+        if choice2 == "Prenotato":
+            but1 = st.button("Tavolo 16 🕓")
+    if choice1 == "17":
+        if choice2 == "Occupato":
+            but1 = st.button("Tavolo 17 👨‍👩‍👧‍👦")
+        if choice2 == "Libero":
+            but1 = st.button("Tavolo 17 🍽")
+        if choice2 == "Prenotato":
+            but1 = st.button("Tavolo 17 🕓")
+    if choice1 == "18":
+        if choice2 == "Occupato":
+            but1 = st.button("Tavolo 18 👨‍👩‍👧‍👦")
+        if choice2 == "Libero":
+            but1 = st.button("Tavolo 18 🍽")
+        if choice2 == "Prenotato":
+            but1 = st.button("Tavolo 18 🕓")
+    if choice1 == "19":
+        if choice2 == "Occupato":
+            but1 = st.button("Tavolo 19 👨‍👩‍👧‍👦")
+        if choice2 == "Libero":
+            but1 = st.button("Tavolo 19 🍽")
+        if choice2 == "Prenotato":
+            but1 = st.button("Tavolo 19 🕓")
+    if choice1 == "20":
+        if choice2 == "Occupato":
+            but1 = st.button("Tavolo 20 👨‍👩‍👧‍👦")
+        if choice2 == "Libero":
+            but1 = st.button("Tavolo 20 🍽")
+        if choice2 == "Prenotato":
+            but1 = st.button("Tavolo 20 🕓")
+            
+    
+    st.success('Modifica effettuata con successo')
+
 else:
     st.warning("Seleziona tavolo e stato ⚠️")
 
