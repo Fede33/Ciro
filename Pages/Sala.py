@@ -7,7 +7,7 @@ import numpy as np
 import time
 from bokeh.models.widgets import Div
 from st_aggrid import GridOptionsBuilder, AgGrid, GridUpdateMode, DataReturnMode
-from functions import make_grid
+
 
 if not firebase_admin._apps:
     cred = credentials.Certificate('ciro-1375d-firebase.json')
@@ -15,8 +15,6 @@ if not firebase_admin._apps:
 db = firestore.client()
 
 st.set_page_config(page_title='Ciro', layout = 'wide', page_icon = "", initial_sidebar_state = 'auto')
-
-
 
 doc_ref = db.collection("tavoli")
 docs = doc_ref.stream()
@@ -41,19 +39,16 @@ for i in range(0, cols):
     for l in range(0, rows):
         if var<len(tav):
             if tav[var]['Stato']== "Occupato":
-                b = st.button(f"Tavolo {tav[var]['Numero']} 👨‍👩‍👧‍👦", key=f"{tav[var]['Numero']}")
-                grid[i][l].a
-                if a:
+                if grid[i][l].button(f"Tavolo {tav[var]['Numero']} 👨‍👩‍👧‍👦", key=f"{tav[var]['Numero']}"):
                     js = "window.open('http://localhost:8501/Tavoli')"  # New tab or window
                     js = "window.location.href = 'http://localhost:8501/Tavoli'"  # Current tab
                     html = '<img src onerror="{}">'.format(js)
                     div = Div(text=html)
                     st.bokeh_chart(div)
 
+
             if tav[var]['Stato'] == "Libero":
-                a = st.button(f"Tavolo {tav[var]['Numero']} 🍽", key=f"{tav[var]['Numero']}")
-                grid[i][l].a
-                if a:
+                if grid[i][l].button(f"Tavolo {tav[var]['Numero']} 🍽", key=f"{tav[var]['Numero']}"):
                     js = "window.open('http://localhost:8501/Tavoli')"  # New tab or window
                     js = "window.location.href = 'http://localhost:8501/Tavoli'"  # Current tab
                     html = '<img src onerror="{}">'.format(js)
@@ -61,22 +56,19 @@ for i in range(0, cols):
                     st.bokeh_chart(div)
 
             if tav[var]['Stato'] == "Prenotato":
-                a = st.button(f"Tavolo {tav[var]['Numero']} 🕓", key=f"{tav[var]['Numero']}")
-                grid[i][l].a
-                if a:
+                if grid[i][l].button(f"Tavolo {tav[var]['Numero']} 🕓", key=f"{tav[var]['Numero']}"):
                     js = "window.open('http://localhost:8501/Tavoli')"  # New tab or window
                     js = "window.location.href = 'http://localhost:8501/Tavoli'"  # Current tab
                     html = '<img src onerror="{}">'.format(js)
                     div = Div(text=html)
                     st.bokeh_chart(div)
+
         else:
             pass
         var = var+1
 
 
-
 """
-
 
 if but1:
     n_tav = "1"

@@ -6,6 +6,7 @@ from firebase_admin import firestore
 import pandas as pd
 import time
 from st_aggrid import GridOptionsBuilder, AgGrid, GridUpdateMode, DataReturnMode
+from functions import redirect
 
 if not firebase_admin._apps:
     cred = credentials.Certificate('ciro-1375d-firebase.json')
@@ -26,11 +27,12 @@ for doc in docs:
 
 
 
-#home = st.button("Home 🏠")
+home = st.button("Home 🏠")
 
-#if home:
-    #js = "window.open('http://localhost:8501/Sala')"  # New tab or window
-    #js = "window.location.href = 'http://localhost:8501/Sala'"  # Current tab
-    #html = '<img src onerror="{}">'.format(js)
-    #div = Div(text=html)
-    #st.bokeh_chart(div)
+if home:
+    js = "window.open('http://localhost:8501/Sala')"  # New tab or window
+    js = "window.location.href = 'http://localhost:8501/Sala'"  # Current tab
+    html = '<img src onerror="{}">'.format(js)
+    div = Div(text=html)
+    st.bokeh_chart(div)
+
