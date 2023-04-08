@@ -17,6 +17,9 @@ if not firebase_admin._apps:
     firebase_admin.initialize_app(cred)
 db = firestore.client()
 
+# Imposto il layout di pagina
+st.set_page_config(layout="wide")
+
 # Creo una nuova collezione 'ordini_cameriere'
 if "ordini_cameriere" not in db.collections():
     db.collection("ordini_cameriere").document("dummy").set({"dummy":"dummy"})
@@ -72,35 +75,38 @@ ordini_totali = len(db.collection("ordini_cameriere").get())
 
 # Costruisco la UI
 st.header("Lista degli ordini")
-st.subheader("Clicca sulla notifica per segnare come completato")
 docs = db.collection("ordini_cameriere").stream()
+k = 0
 for doc in docs:
+    k += 1
     doc_data = doc.to_dict()
     print(doc_data)
+    c1, c2, c3, c4 = st.columns((1, 2, 1, 1))
 
-    # Il dummy viene ignorato e non può essere manipolato
     if("dummy" not in doc_data.keys()):
-        header = doc_data["nome"] + " - Tavolo: " + str(doc_data["tavolo"]) + " [" + doc_data['timestamp'] + "]"
-        with st.expander(header):
-            button = st.button("Completato! [" + str(doc_data["id"]) + "]")
-            if button:
-                st.success("Ordine completato!")
+        with c1:
+            st.write(doc_data['timestamp'])
+        with c2:
+            st.write(doc_data['nome'])
+        with c3:
+            st.write("Tavolo " + str(doc_data['tavolo']))
+        with c4:
+            button = st.button("Completato!", key=k)
+        if button:
                 
-                # Ordine eliminato dal database
-                docName = "ordine" + str(int(doc_data["id"]) + 1)
-                print("=== " + docName + " ===")
-                db.collection("ordini_cameriere").document(docName).delete()
+            # Ordine eliminato dal database
+            doc.reference.delete()
 
-                # Aggiungo elemento agli ordini completati
-                completati_ref = db.collection("ordini_cameriere_completati")
-                nome_doc = "ordine" + str(st.session_state.ordini_completati)
-                doc_data['ora_completato'] = time.strftime("%H:%M:%S")
-                completati_ref.document(nome_doc).set(doc_data)
+            # Aggiungo elemento agli ordini completati
+            collection_ref = db.collection("ordini_cameriere_completati")
+            docName = "ordine" + str(st.session_state.ordini_completati)
+            doc_data['ora_completato'] = time.strftime("%H:%M:%S")
+            collection_ref.document(docName).set(doc_data)
 
-                # Aggiorno UI
-                st.session_state.ordini_completati += 1
-                docs = db.collection("ordini_cameriere").stream()
-                st.experimental_rerun()
+            # Aggiorno UI
+            st.success("Ordine completato!")
+            st.session_state.ordini_completati += 1
+            st.experimental_rerun()
 
 
 # Se un solo elemento in 'ordini_completati' => solo il dummy
@@ -111,8 +117,6 @@ else:
     st.write(f"## Numero di Ordini Completati: {st.session_state.ordini_completati}/{ordini_totali - 1 + st.session_state.ordini_completati}")
 
 st.markdown("""---""")
-st.markdown("##")
-st.markdown("##")
 st.markdown("##")
 
 #--DEBUG Scommentare per ricondursi al caso in cui non ci sono ancora ordini completati
