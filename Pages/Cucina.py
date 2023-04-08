@@ -18,7 +18,7 @@ if not firebase_admin._apps:
 db = firestore.client()
 
 # Imposto il layout di pagina
-st.set_page_config(layout="wide")
+st.set_page_config(page_title='Ciro', layout = 'wide', page_icon = "", initial_sidebar_state = 'auto')
 
 # Creo una nuova collezione 'ordini_cameriere'
 if "ordini_cameriere" not in db.collections():
