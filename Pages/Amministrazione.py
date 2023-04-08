@@ -11,6 +11,7 @@ if not firebase_admin._apps:
     firebase_admin.initialize_app(cred)
 db = firestore.client()
 
+st.set_page_config(page_title='Ciro', layout = 'wide', page_icon = "", initial_sidebar_state = 'auto')
 st.markdown('# <span style="color: #983C8E;">Amministrazione</span>', unsafe_allow_html=True)
 choice = st.selectbox('Scegli che azione eseguire', ['','Inserimento', 'Aggiornamento', 'Eliminazione'])
 if choice == '':

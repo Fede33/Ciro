@@ -7,64 +7,75 @@ import numpy as np
 import time
 from bokeh.models.widgets import Div
 from st_aggrid import GridOptionsBuilder, AgGrid, GridUpdateMode, DataReturnMode
+from functions import make_grid
 
 if not firebase_admin._apps:
     cred = credentials.Certificate('ciro-1375d-firebase.json')
     firebase_admin.initialize_app(cred)
 db = firestore.client()
 
+st.set_page_config(page_title='Ciro', layout = 'wide', page_icon = "", initial_sidebar_state = 'auto')
 
 
-col1, col2, col3, col4 = st.columns(4)
+
+doc_ref = db.collection("tavoli")
+docs = doc_ref.stream()
+tav = []
+
+#creazione dizionari aggiunti poi a lista tav
+for doc in docs:
+	prodotti_dict = {"Numero" : doc.to_dict()['id'],"Stato": doc.to_dict()['stato']} 
+	tav.append(prodotti_dict)
 
 
-with col1:
-    but1 = st.button("Tavolo 1 🍽")
-    st.write(" ")
-    but5 = st.button("Tavolo 5 🍽")
-    st.write(" ")
-    but9 = st.button("Tavolo 9 🍽")
-    st.write(" ")
-    but13 = st.button("Tavolo 13 🍽")
-    st.write(" ")
-    but17 = st.button("Tavolo 17 🍽")
-    st.write(" ")
+num_tavoli = len(tav)
+#visualizzazione griglia sala
+rows = 5
+cols = int(num_tavoli/5)+1
+grid = make_grid(cols,rows)
 
-with col2:
-    but2 = st.button("Tavolo 2 🍽")
-    st.write(" ")
-    but6 = st.button("Tavolo 6 🍽")
-    st.write(" ")
-    but10 = st.button("Tavolo 10 🍽")
-    st.write(" ")
-    but14 = st.button("Tavolo 14 🍽")
-    st.write(" ")
-    but18 = st.button("Tavolo 18 🍽")
-    st.write(" ")
+sorted(tav, key=lambda x: x['Numero'])
 
-with col3:
-    but3 = st.button("Tavolo 3 🍽")
-    st.write(" ")
-    but7 = st.button("Tavolo 7 🍽")
-    st.write(" ")
-    but11 = st.button("Tavolo 11 🍽")
-    st.write(" ")
-    but15 = st.button("Tavolo 15 🍽")
-    st.write(" ")
-    but19 = st.button("Tavolo 19 🍽")
-    st.write(" ")
+var = 0
+for i in range(0, cols):
+    for l in range(0, rows):
+        if var<len(tav):
+            if tav[var]['Stato']== "Occupato":
+                b = st.button(f"Tavolo {tav[var]['Numero']} 👨‍👩‍👧‍👦", key=f"{tav[var]['Numero']}")
+                grid[i][l].a
+                if a:
+                    js = "window.open('http://localhost:8501/Tavoli')"  # New tab or window
+                    js = "window.location.href = 'http://localhost:8501/Tavoli'"  # Current tab
+                    html = '<img src onerror="{}">'.format(js)
+                    div = Div(text=html)
+                    st.bokeh_chart(div)
 
-with col4:
-    but4 = st.button("Tavolo 4 🍽")
-    st.write(" ")
-    but8 = st.button("Tavolo 8 🍽")
-    st.write(" ")
-    but12 = st.button("Tavolo 12 🍽")
-    st.write(" ")
-    but16 = st.button("Tavolo 16 🍽")
-    st.write(" ")
-    but20 = st.button("Tavolo 20 🍽")
-    st.write(" ")
+            if tav[var]['Stato'] == "Libero":
+                a = st.button(f"Tavolo {tav[var]['Numero']} 🍽", key=f"{tav[var]['Numero']}")
+                grid[i][l].a
+                if a:
+                    js = "window.open('http://localhost:8501/Tavoli')"  # New tab or window
+                    js = "window.location.href = 'http://localhost:8501/Tavoli'"  # Current tab
+                    html = '<img src onerror="{}">'.format(js)
+                    div = Div(text=html)
+                    st.bokeh_chart(div)
+
+            if tav[var]['Stato'] == "Prenotato":
+                a = st.button(f"Tavolo {tav[var]['Numero']} 🕓", key=f"{tav[var]['Numero']}")
+                grid[i][l].a
+                if a:
+                    js = "window.open('http://localhost:8501/Tavoli')"  # New tab or window
+                    js = "window.location.href = 'http://localhost:8501/Tavoli'"  # Current tab
+                    html = '<img src onerror="{}">'.format(js)
+                    div = Div(text=html)
+                    st.bokeh_chart(div)
+        else:
+            pass
+        var = var+1
+
+
+
+"""
 
 
 if but1:
@@ -96,3 +107,5 @@ if but4:
     html = '<img src onerror="{}">'.format(js)
     div = Div(text=html)
     st.bokeh_chart(div)
+
+"""

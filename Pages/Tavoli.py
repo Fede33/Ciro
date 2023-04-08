@@ -12,6 +12,8 @@ if not firebase_admin._apps:
     firebase_admin.initialize_app(cred)
 db = firestore.client()
 
+st.set_page_config(page_title='Ciro', layout = 'wide', page_icon = "", initial_sidebar_state = 'auto')
+
 st.markdown('# <span style="color: #983C8E;">Ordinazione tavoli</span>', unsafe_allow_html=True)
 
 doc_ref = db.collection(f"menu")
