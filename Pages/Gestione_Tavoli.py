@@ -26,9 +26,6 @@ for doc in docs:
     tav.append(doc.to_dict()['id'])
 
 
-print("eccoci qui")
-print(tav)
-
 
 if numero_tavoli and tavoli:
     i = 0

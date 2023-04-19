@@ -7,6 +7,8 @@ import numpy as np
 import time
 from bokeh.models.widgets import Div
 from st_aggrid import GridOptionsBuilder, AgGrid, GridUpdateMode, DataReturnMode
+from functions import make_grid
+from functions import get_id
 
 
 if not firebase_admin._apps:
@@ -40,6 +42,24 @@ for i in range(0, cols):
         if var<len(tav):
             if tav[var]['Stato']== "Occupato":
                 if grid[i][l].button(f"Tavolo {tav[var]['Numero']} 👨‍👩‍👧‍👦", key=f"{tav[var]['Numero']}"):
+                    
+                    num_tav = str(tav[var]['Numero'])
+                    get_id(num_tav)
+
+                    
+                    #id_tav = datetime.now(ZoneInfo("Europe/Rome")).strftime("%d-%m-%Y_%H:%M:%S")
+                    #str_id_tav = str(id_tav) + "_" + str(tav[var]['Numero'])
+                    #get_id(str_id_tav)
+                    #doc_reff = db.collection(u"ordini").document(str_id_tav)
+                    #doc = doc_reff.get()
+                    #doc_reff.set({
+                        #'data': id_tav,
+                        #'tavolo': tav[var]['Numero'],
+                        #'piatti': {},
+                        #'prezzo': 0
+                        #})
+                    
+                    
                     js = "window.open('http://localhost:8501/Tavoli')"  # New tab or window
                     js = "window.location.href = 'http://localhost:8501/Tavoli'"  # Current tab
                     html = '<img src onerror="{}">'.format(js)
@@ -67,37 +87,3 @@ for i in range(0, cols):
             pass
         var = var+1
 
-
-"""
-
-if but1:
-    n_tav = "1"
-    js = "window.open('http://localhost:8501/Tavoli')"  # New tab or window
-    js = "window.location.href = 'http://localhost:8501/Tavoli'"  # Current tab
-    html = '<img src onerror="{}">'.format(js)
-    div = Div(text=html)
-    st.bokeh_chart(div)
-
-if but2:
-    js = "window.open('http://localhost:8501/Tavoli')"  # New tab or window
-    js = "window.location.href = 'http://localhost:8501/Tavoli'"  # Current tab
-    html = '<img src onerror="{}">'.format(js)
-    div = Div(text=html)
-    st.bokeh_chart(div)
-
-if but3:
-    js = "window.open('http://localhost:8501/Tavoli')"  # New tab or window
-    js = "window.location.href = 'http://localhost:8501/Tavoli'"  # Current tab
-    html = '<img src onerror="{}">'.format(js)
-    div = Div(text=html)
-    st.bokeh_chart(div)
-
-if but4:
-
-    js = "window.open('http://localhost:8501/Tavoli')"  # New tab or window
-    js = "window.location.href = 'http://localhost:8501/Tavoli'"  # Current tab
-    html = '<img src onerror="{}">'.format(js)
-    div = Div(text=html)
-    st.bokeh_chart(div)
-
-"""
