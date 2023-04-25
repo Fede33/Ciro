@@ -7,6 +7,8 @@ import firebase_admin
 from firebase_admin import credentials
 from firebase_admin import firestore
 
+import schedule
+
 # Accedo al database di Ciro
 if not firebase_admin._apps:
     cred = credentials.Certificate('ciro-1375d-firebase.json')
@@ -26,8 +28,31 @@ if "ordini_cameriere_completati" not in db.collections():
 #docs = db.collection("ordini_cameriere").stream()
 #for doc in docs:
 #    doc.reference.delete()
-#db.collection("ordini_cameriere").document().delete()
+#db.collection("ordini_cameriere").document().delete() 
 
+# Ogni giorno, ad una certa ora, svuota le collezioni ordini_cameriere ed ordini_cameriere_completati
+def clearDatabase(db):
+    docs = db.collection("ordini_cameriere").stream()
+    for doc in docs:
+        doc.reference.delete()
+    db.collection("ordini_cameriere").document().delete()
+
+    docs = db.collection("ordini_cameriere_completati").stream()
+    for doc in docs:
+        doc.reference.delete()
+    db.collection("ordini_cameriere_completati").document().delete()
+
+    print("Collections cleared")
+    return
+
+schedule.every().day.at("00:00").do(clearDatabase, db)
+
+# Test
+def test():
+    print("Ha funzionato")
+schedule.every().day.at("14:40").do(test)
+
+# Inserimento dati
 ordine1 = {
     "tavolo":1,
     "timestamp": time.strftime("%H:%M:%S"),
