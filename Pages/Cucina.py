@@ -30,28 +30,6 @@ if "ordini_cameriere_completati" not in db.collections():
 #    doc.reference.delete()
 #db.collection("ordini_cameriere").document().delete() 
 
-# Ogni giorno, ad una certa ora, svuota le collezioni ordini_cameriere ed ordini_cameriere_completati
-def clearDatabase(db):
-    docs = db.collection("ordini_cameriere").stream()
-    for doc in docs:
-        doc.reference.delete()
-    db.collection("ordini_cameriere").document().delete()
-
-    docs = db.collection("ordini_cameriere_completati").stream()
-    for doc in docs:
-        doc.reference.delete()
-    db.collection("ordini_cameriere_completati").document().delete()
-
-    print("Collections cleared")
-    return
-
-schedule.every().day.at("00:00").do(clearDatabase, db)
-
-# Test
-def test():
-    print("Ha funzionato")
-schedule.every().day.at("14:40").do(test)
-
 # Inserimento dati
 ordine1 = {
     "tavolo":1,
@@ -102,6 +80,17 @@ ordine7 = {
     "cameriere":7
 }
 
+#if(st.session_state.ordini_totali == 0):
+if(False):
+    db.collection("ordini_cameriere").document("ordine1").set(ordine1)
+    db.collection("ordini_cameriere").document("ordine2").set(ordine2)
+    db.collection("ordini_cameriere").document("ordine3").set(ordine3)
+    db.collection("ordini_cameriere").document("ordine4").set(ordine4)
+    db.collection("ordini_cameriere").document("ordine5").set(ordine5)
+    db.collection("ordini_cameriere").document("ordine6").set(ordine6)
+    db.collection("ordini_cameriere").document("ordine7").set(ordine7)
+
+
 # Contatore ordini completati
 ordini_completati = 0
 if "ordini_completati" not in st.session_state:
@@ -117,16 +106,30 @@ ordini_restanti = st.session_state.ordini_totali
 if "ordini_restanti" not in st.session_state:
     st.session_state.ordini_restanti = ordini_restanti
 
+# Funzioen che elimina i documenti delle collezione "ordini_cameriere" ed "ordini_cameriere_completati"
+def clearDatabase(db):
+    docs = db.collection("ordini_cameriere").stream()
+    for doc in docs:
+        doc.reference.delete()
+    db.collection("ordini_cameriere").document().delete()
 
-if(st.session_state.ordini_totali == 0):
-    db.collection("ordini_cameriere").document("ordine1").set(ordine1)
-    db.collection("ordini_cameriere").document("ordine2").set(ordine2)
-    db.collection("ordini_cameriere").document("ordine3").set(ordine3)
-    db.collection("ordini_cameriere").document("ordine4").set(ordine4)
-    db.collection("ordini_cameriere").document("ordine5").set(ordine5)
-    db.collection("ordini_cameriere").document("ordine6").set(ordine6)
-    db.collection("ordini_cameriere").document("ordine7").set(ordine7)
+    docs = db.collection("ordini_cameriere_completati").stream()
+    for doc in docs:
+        doc.reference.delete()
+    db.collection("ordini_cameriere_completati").document().delete()
 
+    st.session_state.ordini_totali = 0
+
+    st.experimental_rerun()
+
+# Campo bottone
+k1, k2 = st.columns((1, 1))
+with k1: st.text("Clicca qui alla fine della giornata:")
+with k2: c = st.checkbox(label="", key="checkChiusura")
+if c:
+    clearBtn = st.button("Cancella il contenuto dei database!")
+    if clearBtn:
+        clearDatabase(db)
 
 def display_orders():
 
